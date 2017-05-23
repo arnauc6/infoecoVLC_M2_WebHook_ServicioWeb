@@ -12,7 +12,7 @@ import os
 from respuestas.pago_barrios import pagoBarrios
 
 
-pagoBarrios({"action":"ENTRA","parameters": {"barrios": "Benimaclet", "impuestos": "impuestos"}},{})
+##pagoBarrios({"action":"ENTRA","parameters": {"barrios": "Benimaclet", "impuestos": "impuestos"}},{})
 ##------------------------------------------------------------------------------
 ## Conexión MongoDB
 ##------------------------------------------------------------------------------
