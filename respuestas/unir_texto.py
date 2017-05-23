@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 def unirTexto(texto, *parametros):
     respuesta = u""
     if len(texto)==len(parametros):
