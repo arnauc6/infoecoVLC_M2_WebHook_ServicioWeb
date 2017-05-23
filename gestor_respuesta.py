@@ -35,7 +35,9 @@ client = pymongo.MongoClient(uri)
 db = client.get_default_database()
 dbValencia = db.impuestosBarrios # Accedemos a la colección donde almacenamos todos los datos
 
-
+def pagoBarriosDos(a,b):
+    print "Dentro de PagoBarrios"
+    
 ##------------------------------------------------------------------------------
 ## Función que selecciona la función que obtiene la respuesta correcta
 ##------------------------------------------------------------------------------
@@ -55,5 +57,5 @@ def gestorRespuesta(f,q):
 
 # Cada nueva respuesta añadir un key: <nombre_función>
 funcionGestorRespuesta = {
-    "pagoBarrios": pagoBarrios
+    "pagoBarrios": pagoBarriosDos
     } # Tiene que estar al final de las funciones que pretendemos llamar
