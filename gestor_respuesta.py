@@ -9,7 +9,7 @@ import pymongo
 import os
 
 # Importamos todos los módulos que contienen las respuestas a las distintas preguntas
-from respuestas.pago_barrios import *
+from respuestas.pago_barrios import pagoBarrios
 
 
 
@@ -57,5 +57,5 @@ def gestorRespuesta(f,q):
 
 # Cada nueva respuesta añadir un key: <nombre_función>
 funcionGestorRespuesta = {
-    "pagoBarrios": pagoBarriosDos
+    "pagoBarrios": pagoBarrios
     } # Tiene que estar al final de las funciones que pretendemos llamar
