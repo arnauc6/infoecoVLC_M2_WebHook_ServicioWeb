@@ -26,7 +26,7 @@ textoRespuesta = [u"El barrio de ", u" paga ", u"€ de "]
 ## Funcion principal
 ##//////////////////////////////////////////////////////////////////////////////
 def pagoBarrios(result,dbValencia):
-    print u"Recibimos petición de", unicode(result["action"])
+    print u"Recibimos petición de", type(result["action"])
 
     # Sacamos los parámetros  de result ---------------------------------------
     impuesto = result["parameters"]["impuestos"]
