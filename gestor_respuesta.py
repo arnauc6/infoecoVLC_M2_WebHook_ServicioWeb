@@ -40,6 +40,8 @@ dbValencia = db.impuestosBarrios # Accedemos a la colección donde almacenamos t
 ## Función que selecciona la función que obtiene la respuesta correcta
 ##------------------------------------------------------------------------------
 def gestorRespuesta(f,q):
+    print "Dentro de gestorRespuesta"
+    print type(dbValencia)
     respuesta = funcionGestorRespuesta[f](q,dbValencia)
     
     return respuesta
