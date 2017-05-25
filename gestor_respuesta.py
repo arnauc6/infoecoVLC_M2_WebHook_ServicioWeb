@@ -41,12 +41,7 @@ dbValencia = db.impuestosBarrios # Accedemos a la colección donde almacenamos t
 ##------------------------------------------------------------------------------
 def gestorRespuesta(f,q):
     print "Dentro de gestorRespuesta"
-##    print type(dbValencia)
-##    print "funcion: ", f, ", Consulta: ", q
-    respuesta = pagoBarrios(q,dbValencia)
-    print "Funciona!"
-    print respuesta
-    
+
     respuesta = funcionGestorRespuesta[f](q,dbValencia)
     
     return respuesta
