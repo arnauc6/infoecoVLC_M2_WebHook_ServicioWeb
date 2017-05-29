@@ -47,8 +47,6 @@ def pagoBarrios(result,db):
         print u"    - Error función valor"
 
     try:
-        print valor
-        print type(valor)
         if valor == "-1,00":
             texto = u"No disponemos de los datos del año "+str(anyo)
         else:
