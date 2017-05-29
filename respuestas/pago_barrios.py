@@ -7,7 +7,25 @@
 
 # Importar locales solo si el valor resultado es numérico
 import locale #Librería que nos permite adaptar el formato numérico al Español
-locale.setlocale(locale.LC_ALL,'')
+##locale.setlocale(locale.LC_ALL, ('es_ES', 'cp1252'))
+locale.setlocale(locale.LC_ALL, 'es_ES.utf-8')
+##try:
+##    try:
+##        locale.setlocale(locale.LC_ALL, 'es_ES.utf-8')
+##        print "1"
+##    except:
+##        pass
+##    try:
+##        locale.setlocale(locale.LC_ALL, 'es_ES@euro')
+##        print "2"
+##    except:
+##        pass
+##        
+##except: 
+##    locale.setlocale(locale.LC_ALL, '')
+##    print u"No funciona ningun locale"
+##locale.setlocale(locale.LC_ALL, "es_ES.utf-8")
+##locale.setlocale(locale.LC_ALL, "es_ES@euro")
 
 from bson.son import SON
 
