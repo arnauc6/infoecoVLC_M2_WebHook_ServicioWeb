@@ -8,7 +8,7 @@
 # Importar locales solo si el valor resultado es numérico
 import locale #Librería que nos permite adaptar el formato numérico al Español
 
-locale.setlocale(locale.LC_ALL, '')
+locale.setlocale(locale.LC_ALL,'')
 
 
 from bson.son import SON
@@ -21,10 +21,10 @@ from unir_texto import * # Llama a la función que une el texto
 ##//////////////////////////////////////////////////////////////////////////////
 
 # Texto ejemplo:
-#   - El barrio de Benimaclet paga 6,428,288.48 € de impuestos en el año 2016
+#   - El barrio de Benimaclet pagó 6,428,288.48 € de impuestos en el año 2016
 
 # Texto en la lista:
-textoRespuesta = [u"El barrio de ", u" paga ", u"€ de ", u" en el año "]
+textoRespuesta = [u"El barrio de ", u" pagó ", u"€ de ", u" en el año "]
 
 
 ##//////////////////////////////////////////////////////////////////////////////
@@ -72,6 +72,8 @@ def valorPagoBarrios(impuesto,barrio,anyo,dbBarrios):
 
     if anyo == u"null": #Sin datos de año cogemos el último año
         anyo = { "$exists": "true" }
+    else:
+        anyo = int(anyo)
 
     pipeline = [
         {"$match": {"barrio": barrio, "anio": anyo}},
