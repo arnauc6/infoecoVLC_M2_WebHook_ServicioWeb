@@ -33,17 +33,16 @@ except:
     print "Error al cargar URL de MongoDB"
 
 client = pymongo.MongoClient(uri)
-db = client.get_default_database()
-dbValencia = db.impuestosBarrios # Accedemos a la colección donde almacenamos todos los datos
+db = client.get_default_database() # Accedemos a la BD donde tenemos las colecciones
 
 
 ##------------------------------------------------------------------------------
 ## Función que selecciona la función que obtiene la respuesta correcta
 ##------------------------------------------------------------------------------
 def gestorRespuesta(f,q):
-    print "Dentro de gestorRespuesta"
+##    print "Dentro de gestorRespuesta"
 
-    respuesta = funcionGestorRespuesta[f](q,dbValencia)
+    respuesta = funcionGestorRespuesta[f](q,db)
     
     return respuesta
 

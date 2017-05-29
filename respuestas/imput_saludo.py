@@ -24,6 +24,6 @@ textoRespuesta = u"Buenos días"
 ##//////////////////////////////////////////////////////////////////////////////
 
 def imputSaludo(result,dbValencia):
-    print u"Recibimos petición de", type(result["action"])
+    print u"Recibimos petición de", result["action"]
     texto = textoRespuesta
     return texto

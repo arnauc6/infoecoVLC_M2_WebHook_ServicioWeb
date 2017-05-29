@@ -9,7 +9,9 @@
 import locale #Librería que nos permite adaptar el formato numérico al Español
 locale.setlocale(locale.LC_ALL,'')
 
-from unir_texto import *
+from bson.son import SON
+
+from unir_texto import * # Llama a la función que une el texto
 
 
 ##//////////////////////////////////////////////////////////////////////////////
@@ -17,32 +19,37 @@ from unir_texto import *
 ##//////////////////////////////////////////////////////////////////////////////
 
 # Texto ejemplo:
-#   - El barrio de Benimaclet paga 6,428,288.48 € de impuestos
+#   - El barrio de Benimaclet paga 6,428,288.48 € de impuestos en el año 2016
+
 # Texto en la lista:
-textoRespuesta = [u"El barrio de ", u" paga ", u"€ de "]
+textoRespuesta = [u"El barrio de ", u" paga ", u"€ de ", u" en el año "]
 
 
 ##//////////////////////////////////////////////////////////////////////////////
 ## Funcion principal
 ##//////////////////////////////////////////////////////////////////////////////
-def pagoBarrios(result,dbValencia):
-    print u"Recibimos petición de", type(result["action"])
+def pagoBarrios(result,db):
+    print u"Recibimos petición de", result["action"]
+    dbBarrios = db.barrios # Accedemos a la colección donde almacenamos todos los datos
 
-    # Sacamos los parámetros  de result ---------------------------------------
-    impuesto = result["parameters"]["impuestos"]
-    barrio = result["parameters"]["barrios"]
-    #--------------------------------------------------------------- parámetros
-    
-    query = {"barrio": barrio.lower()} #------------------------------------ Consulta
-    
-    try:
-        cursor = dbValencia.find(query) # Realizamos la consulta en la BD
+    # Sacamos los parámetros  de result ----------------------------------------
+    try: 
+        impuesto = result["parameters"]["impuestos"]
+        barrio = result["parameters"]["barrios"]
+        anyo = result["parameters"]["anyo"]
     except:
-        print "Error en la consulta: ", query
-        
-    valor = valorPagoBarrios(cursor, impuesto)
-    
-    texto = unirTexto(textoRespuesta, barrio, valor, impuesto)
+        print u"    - Error al obtener los parametros"
+    #---------------------------------------------------------------- parámetros
+    try:
+        valor, anyo = valorPagoBarrios(impuesto,barrio,anyo,dbBarrios)
+ 
+    except:
+        print u"    - Error función valor"
+
+    try:
+        texto = unirTexto(textoRespuesta, barrio, valor, impuesto, anyo)
+    except:
+        print u"    - Error función unirTexto"
     #Condiciones unirTexto():
     #   - Ejemplo de uso: unirTexto(textoRespuesta, parámetro1, parámetro2)
     #   - Puede tener muchos parámetros.
@@ -56,34 +63,91 @@ def pagoBarrios(result,dbValencia):
 ## Funciones
 ##//////////////////////////////////////////////////////////////////////////////
 
-def valorPagoBarrios(cursor, impuesto):
-    try:
-        # Por la estructura de la BD solo nos interesa obtener el último doc.
-        doc = cursor[0]
+def valorPagoBarrios(impuesto,barrio,anyo,dbBarrios):   
 
-        # Según el impuesto calculamos el valor con la fórmula que toque
-        if impuesto == "impuestos":
-            valor = float(doc[u"IVTNU Esforç Fiscal Personas Jurídicas"])+float(doc[u"IVTNU Esforç Fiscal Personas Físicas"])+float(doc[u"IAE Esforç Fiscal"])+float(doc[u"IVTM Esforç Fiscal Persones Jurídicas"])+float(doc[u"IVTM Esforç Fiscal Persones Físicas"])+float(doc[u"IBI Esforç Fiscal Persones Jurídicas"])+float(doc[u"IBI Esforç Fiscal Persones Físicas"])
+    if anyo == u"null": #Sin datos de año cogemos el último año
+        anyo = { "$exists": "true" }
 
-        elif impuesto=="IVTNU":
-            valor = float(doc[u"IVTNU Esforç Fiscal Personas Jurídicas"])+float(doc[u"IVTNU Esforç Fiscal Personas Físicas"])
-                
-        elif impuesto=="IAE":
-            valor = float(doc[u"IAE Esforç Fiscal"])
-                
-        elif impuesto=="IVTM":
-            valor = float(doc[u"IVTM Esforç Fiscal Persones Jurídicas"])+float(doc[u"IVTM Esforç Fiscal Persones Físicas"])
-                
-        elif impuesto=="IBI":
-            valor = float(doc[u"IBI Esforç Fiscal Persones Jurídicas"])+float(doc[u"IBI Esforç Fiscal Persones Físicas"])
+    pipeline = [
+        {"$match": {"barrio": barrio, "anio": anyo}},
+        {"$sort": SON([("anio", -1)])},
+        {"$limit": 1},
+        {"$project": {
+            "_id": "$barrio",
+            "valor": {"$sum": []},
+            "anyo": "$anio"
+            }
+         }
+        ]
     
-        else:
-            valor = -1
+    try:
+        suma = sumaImpuesto(impuesto)
     except:
-         print "Error en la gestión de la consulta sobre el impuesto: ", impuesto
-         valor = -1
+        print u"     - Error en suma"
+        
+    try:
+        pipeline[3]["$project"]["valor"]["$sum"].extend(suma)
+    except:
+        print u"     - Error al añadir suma a pipline"   
+
+    # Consulta DB
+    try:
+        respuesta = dbBarrios.aggregate(pipeline)
+    except:
+        print "     - Error en la consulta PagoBarrios"
+
+    for dato in respuesta:
+        valor = dato[u"valor"]
+        anyo = dato[u"anyo"]
+        break
 
     # Cambia el formato para que aparezcan los . de millar y solo 2 decimales
     valor = locale.format("%.2f", valor, grouping=True)
-    return valor
+
+    
+    return valor, anyo
+
+
+
+def sumaImpuesto(impuesto):
+    suma = []
+    if impuesto == "impuestos":
+        suma = [
+            "$impuestos.IVTNU Personas Físicas",
+            "$impuestos.IVTNU Personas Jurídicas",
+            "$impuestos.IAE",
+            "$impuestos.IVTM Personas Físicas",
+            "$impuestos.IVTM Personas Jurídicas",
+            "$impuestos.IBI Personas Físicas",
+            "$impuestos.IBI Personas Jurídicas"
+            ]
+
+    elif impuesto=="IVTNU":
+        suma = [
+            "$impuestos.IVTNU Personas Físicas",
+            "$impuestos.IVTNU Personas Jurídicas"
+            ]
+        
+    elif impuesto=="IAE":
+        suma = [
+            "$impuestos.IAE"
+            ]
+        
+    elif impuesto=="IVTM":
+        suma = [
+            "$impuestos.IVTM Personas Físicas",
+            "$impuestos.IVTM Personas Jurídicas"
+            ]
+        
+    elif impuesto=="IBI":
+        suma = [
+            "$impuestos.IBI Personas Físicas",
+            "$impuestos.IBI Personas Jurídicas"
+            ]
+
+    else:
+        print u"     - Error en valorPagoBarrios - Datos sin año"
+
+    return suma
+
     
