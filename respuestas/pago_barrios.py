@@ -7,25 +7,9 @@
 
 # Importar locales solo si el valor resultado es numérico
 import locale #Librería que nos permite adaptar el formato numérico al Español
-##locale.setlocale(locale.LC_ALL, ('es_ES', 'cp1252'))
-locale.setlocale(locale.LC_ALL, 'es_ES.utf-8')
-##try:
-##    try:
-##        locale.setlocale(locale.LC_ALL, 'es_ES.utf-8')
-##        print "1"
-##    except:
-##        pass
-##    try:
-##        locale.setlocale(locale.LC_ALL, 'es_ES@euro')
-##        print "2"
-##    except:
-##        pass
-##        
-##except: 
-##    locale.setlocale(locale.LC_ALL, '')
-##    print u"No funciona ningun locale"
-##locale.setlocale(locale.LC_ALL, "es_ES.utf-8")
-##locale.setlocale(locale.LC_ALL, "es_ES@euro")
+
+locale.setlocale(locale.LC_ALL, '')
+
 
 from bson.son import SON
 
@@ -65,7 +49,7 @@ def pagoBarrios(result,db):
         print u"    - Error función valor"
 
     try:
-        if valor == u"-1,00":
+        if valor == u"-1,00" or valor == u"-1.00":
             texto = u"No disponemos de los datos del año "+unicode(anyo)
         else:
             texto = unirTexto(textoRespuesta, barrio, valor, impuesto, anyo)
