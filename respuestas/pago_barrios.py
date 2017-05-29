@@ -47,7 +47,12 @@ def pagoBarrios(result,db):
         print u"    - Error función valor"
 
     try:
-        texto = unirTexto(textoRespuesta, barrio, valor, impuesto, anyo)
+        print valor
+        print type(valor)
+        if valor == "-1,00":
+            texto = u"No disponemos de los datos del año "+str(anyo)
+        else:
+            texto = unirTexto(textoRespuesta, barrio, valor, impuesto, anyo)
     except:
         print u"    - Error función unirTexto"
     #Condiciones unirTexto():
@@ -92,14 +97,23 @@ def valorPagoBarrios(impuesto,barrio,anyo,dbBarrios):
 
     # Consulta DB
     try:
-        respuesta = dbBarrios.aggregate(pipeline)
+        respuesta = list(dbBarrios.aggregate(pipeline))
     except:
         print "     - Error en la consulta PagoBarrios"
 
-    for dato in respuesta:
-        valor = dato[u"valor"]
-        anyo = dato[u"anyo"]
-        break
+    if respuesta == []:
+        valor = -1
+    else:
+        valor = respuesta[0][u"valor"]
+        anyo = respuesta[0][u"anyo"]
+
+    
+    
+##    for dato in respuesta:
+##        print type(dato)
+##        valor = dato[u"valor"]
+##        anyo = dato[u"anyo"]
+##        break
 
     # Cambia el formato para que aparezcan los . de millar y solo 2 decimales
     valor = locale.format("%.2f", valor, grouping=True)
