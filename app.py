@@ -19,17 +19,13 @@ from gestor_respuesta import * # Importa .py con las funciones de respuestas
 ##------------------------------------------------------------------------------
 def makeWebhookResult(post):
     respuesta = ""
-    try:
-        f = post["result"]["action"]  # Extraemos el nombre de la acción
+    f = post["result"]["action"]  # Extraemos el nombre de la acción
                                             # que será el nombre que pongamos a
                                             # la función que le dará respuesta
-        q = post["result"]  # Para dar respuesta solo nos importa la información
+    q = post["result"]  # Para dar respuesta solo nos importa la información
                             # contenida en result
-                            
-        respuesta = gestorRespuesta(f,q)
-        
-    except:
-        print "No funciona "+post["result"]["action"]+"." # Mensaje de error en consola
+
+    respuesta = gestorRespuesta(f,q)
 
     r = {
         "speech": respuesta,

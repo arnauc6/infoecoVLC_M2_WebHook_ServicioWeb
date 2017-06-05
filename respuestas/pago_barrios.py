@@ -8,7 +8,7 @@
 # Importar locales solo si el valor resultado es numérico
 import locale #Librería que nos permite adaptar el formato numérico al Español
 
-locale.setlocale(locale.LC_ALL,'')
+locale.setlocale(locale.LC_ALL,'es_ES.utf8')
 
 
 from bson.son import SON
@@ -31,7 +31,7 @@ textoRespuesta = [u"El barrio de ", u" pagó ", u"€ de ", u" en el año "]
 ## Funcion principal
 ##//////////////////////////////////////////////////////////////////////////////
 def pagoBarrios(result,db):
-    print u"Recibimos petición de", result["action"]
+    print "Recibimos petición de pagoBarrios"
     dbBarrios = db.barrios # Accedemos a la colección donde almacenamos todos los datos
 
     # Sacamos los parámetros  de result ----------------------------------------
