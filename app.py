@@ -7,40 +7,19 @@
 import os
 import json
 
-from flask import Flask         # Flask es un framework minimalista que te
-from flask import request       # permite crear aplicaciones web rápidamente
-from flask import make_response # tiene una licencia BSD
+# Flask es un framework minimalista que te permite crear aplicaciones web rápidamente
+from flask import Flask
+from flask import request
+from flask import make_response
 
-from gestor_respuesta import gestorRespuesta # Importa .py con las funciones de respuestas
-
+from carga_respuestas import * # Importa .py con las funciones de respuestas
 
 ##------------------------------------------------------------------------------
 ## Funciones
 ##------------------------------------------------------------------------------
-def makeWebhookResult(post):
-    respuesta = ""
-    f = post["result"]["action"]  # Extraemos el nombre de la acción
-                                            # que será el nombre que pongamos a
-                                            # la función que le dará respuesta
-    q = post["result"]  # Para dar respuesta solo nos importa la información
-                            # contenida en result
-
-    respuesta = gestorRespuesta(f,q)
-
-    r = {
-        "speech": respuesta,
-        "displayText": respuesta,
-##        "data": {},
-##        "contextOut": [],
-        "source": "arnau"#,
-##        "followupEvent": {
-##            "name": "WELCOME",
-##            "data": {"nombreParam":"ValorParam"} #Llamada: #WELCOME.nombreParam en Action Value
-##            }
-        }
-    
-    return r ##--------------------------------------------- makeWebhookResult()
-
+# def makeWebhookResult(post):
+#     print post
+#     pass
 
 ##------------------------------------------------------------------------------
 ## Variables
@@ -56,27 +35,50 @@ app = Flask(__name__)
 # RUTA POR DEFECTO /
 @app.route("/") # Con esto podemos comprobar que el servidor está activo
 def hello():
-    return "Hello from Python!" 
+    return "Hello from Python!"
 
 
-# RUTA DONDE APUNTA API.IA	
-@app.route('/webhook', methods=['POST'])    # Indicamos la ruta y los métodos 
+# RUTA DONDE APUNTA API.IA /////////////////////////////////////////////////////
+@app.route('/webhook', methods=['POST'])    # Indicamos la ruta y los métodos
 def webhook():                              # que aceptamos
-    
-    req = request.get_json(silent=True, force=True) # Lee el json de la entrada
-                                                    # y lo convierte en dic
-    
-    res = makeWebhookResult(req) # Llamamos a la función que buscará la respuesta
 
-    res = json.dumps(res, indent=4, ensure_ascii=False).encode('utf8') # Convierte el diccionario en string para ser enviado como respuesta
+    # Lee el json de la entrada y lo convierte en dic
+    post = request.get_json(silent=True, force=True)
 
-    r = make_response(res)  # Crea un objeto de respuesta para poder añadir
-                            # valores en la cabecera
-                            
-    r.headers['Content-Type'] = 'application/json' # Añadimos la cabecera
+    respuesta = ""
+
+    # Extraemos el nombre de la acción que será el nombre que pongamos a la función que le dará respuesta
+    f = post["result"]["action"]
+
+    # Para dar respuesta solo nos importa la información contenida en 'result'
+    q = post["result"]
+
+    # Buscamos el texto de la respuesta en la función que corresponda
+    respuesta = funcionGestorRespuesta[f](q,db)
+
+    res = {
+        "speech": respuesta,
+        "displayText": respuesta,
+##        "data": {},
+##        "contextOut": [],
+        "source": "arnau"#,
+##        "followupEvent": {
+##            "name": "WELCOME",
+##            "data": {"nombreParam":"ValorParam"} #Llamada: #WELCOME.nombreParam en Action Value
+##            }
+        }
+
+    # Convierte el diccionario en string para ser enviado como respuesta
+    res = json.dumps(res, indent=4, ensure_ascii=False).encode('utf8')
+
+    # Crea un objeto de respuesta para poder añadir valores en la cabecera
+    r = make_response(res)
+
+    # Añadimos la cabecera
+    r.headers['Content-Type'] = 'application/json'
 
     return r
-	
+    #/////////////////////////////////////////////////////////////////// webhook
 
 ##------------------------------------------------------------------------------
 ## Programa

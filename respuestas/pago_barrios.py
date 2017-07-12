@@ -36,8 +36,9 @@ def pagoBarrios(result,db):
     print "Recibimos petición de pagoBarrios"
     dbBarrios = db.barrios # Accedemos a la colección donde almacenamos todos los datos
 
+    texto = u"LLegó"
     # Sacamos los parámetros  de result ----------------------------------------
-    try: 
+    try:
         impuesto = result["parameters"]["impuestos"]
         barrio = result["parameters"]["barrios"]
         anyo = result["parameters"]["anyo"]
@@ -46,7 +47,7 @@ def pagoBarrios(result,db):
     #---------------------------------------------------------------- parámetros
     try:
         valor, anyo = valorPagoBarrios(impuesto,barrio,anyo,dbBarrios)
- 
+
     except:
         print u"    - Error función valor"
 
@@ -57,11 +58,6 @@ def pagoBarrios(result,db):
             texto = unirTexto(textoRespuesta, barrio, valor, impuesto, anyo)
     except:
         print u"    - Error función unirTexto"
-    #Condiciones unirTexto():
-    #   - Ejemplo de uso: unirTexto(textoRespuesta, parámetro1, parámetro2)
-    #   - Puede tener muchos parámetros.
-    #   - len(textoRespuesta) = Núm. parámetros que insertamos (barrio, etc.)
-    #   - El resultado será: texto[0]+parametro1+texto[1]+parametro2+etc.
 
     return texto
 
@@ -70,7 +66,7 @@ def pagoBarrios(result,db):
 ## Funciones
 ##//////////////////////////////////////////////////////////////////////////////
 
-def valorPagoBarrios(impuesto,barrio,anyo,dbBarrios):   
+def valorPagoBarrios(impuesto,barrio,anyo,dbBarrios):
 
     if anyo == u"null": #Sin datos de año cogemos el último año
         anyo = { "$exists": "true" }
@@ -102,7 +98,8 @@ def valorPagoBarrios(impuesto,barrio,anyo,dbBarrios):
     # Consulta DB
     try:
         respuesta = list(dbBarrios.aggregate(pipeline))
-    except:
+    except Exception as e:
+        print "Error:", type(e), e
         print "     - Error en la consulta PagoBarrios"
 
     if respuesta == []:
@@ -122,7 +119,7 @@ def valorPagoBarrios(impuesto,barrio,anyo,dbBarrios):
     # Cambia el formato para que aparezcan los . de millar y solo 2 decimales
     valor = locale.format("%.2f", valor, grouping=True)
 
-    
+
     return valor, anyo
 
 
@@ -145,18 +142,18 @@ def sumaImpuesto(impuesto):
             "$impuestos.IVTNU Personas Físicas",
             "$impuestos.IVTNU Personas Jurídicas"
             ]
-        
+
     elif impuesto=="IAE":
         suma = [
             "$impuestos.IAE"
             ]
-        
+
     elif impuesto=="IVTM":
         suma = [
             "$impuestos.IVTM Personas Físicas",
             "$impuestos.IVTM Personas Jurídicas"
             ]
-        
+
     elif impuesto=="IBI":
         suma = [
             "$impuestos.IBI Personas Físicas",
@@ -167,5 +164,3 @@ def sumaImpuesto(impuesto):
         print u"     - Error en valorPagoBarrios - Datos sin año"
 
     return suma
-
-    
