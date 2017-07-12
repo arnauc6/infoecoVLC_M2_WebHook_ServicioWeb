@@ -28,8 +28,14 @@ from unir_texto import unirTexto # Llama a la función que une el texto
 # Texto en la lista:
 textoRespuesta = {
         "Cast": [u"El barrio de ", u" pagó ", u"€ de ", u" en el año ", u"."],
-        "Val": [u"El barri de ", u" va pagar ", u" € d'", u" l'any" , u"."]
+        "Val": [u"El barri de ", u" va pagar ", u" € d'", u" l'any " , u"."]
         }
+textoFaltaBarrio = {
+        "Cast": u"""Por favor, indícanos el nombre del barrio del que quieras obtener la información.
+(El nombre debe estar bien escrito)""",
+        "Val": u"""Per favor, indícanos el nombre del barrio del que quieras obtener la información.
+(El nombre debe estar bien escrito)"""
+}
 
 ##//////////////////////////////////////////////////////////////////////////////
 ## Funcion principal
@@ -46,13 +52,19 @@ def pagoBarrios(result,db):
         anyo = result["parameters"]["anyo"]
         idioma = result["parameters"]["idioma"]
     except:
-        print u"    - Error al obtener los parametros"
+        print "    - Error al obtener los parametros"
     #---------------------------------------------------------------- parámetros
+
+    if barrio == u"":
+        return textoFaltaBarrio[idioma]
+
+
+
     try:
         valor, anyo = valorPagoBarrios(impuesto,barrio,anyo,dbBarrios)
 
     except:
-        print u"    - Error función valor"
+        print "    - Error función valor"
 
     try:
         if valor == u"-1,00" or valor == u"-1.00":
@@ -60,7 +72,7 @@ def pagoBarrios(result,db):
         else:
             texto = unirTexto(textoRespuesta[idioma], barrio, valor, impuesto, anyo)
     except:
-        print u"    - Error función unirTexto"
+        print "    - Error función unirTexto"
 
     return texto
 
@@ -111,20 +123,10 @@ def valorPagoBarrios(impuesto,barrio,anyo,dbBarrios):
         valor = respuesta[0][u"valor"]
         anyo = respuesta[0][u"anyo"]
 
-
-
-##    for dato in respuesta:
-##        print type(dato)
-##        valor = dato[u"valor"]
-##        anyo = dato[u"anyo"]
-##        break
-
     # Cambia el formato para que aparezcan los . de millar y solo 2 decimales
     valor = locale.format("%.2f", valor, grouping=True)
 
-
     return valor, anyo
-
 
 
 def sumaImpuesto(impuesto):
