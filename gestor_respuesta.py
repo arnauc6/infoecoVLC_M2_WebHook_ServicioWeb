@@ -54,5 +54,5 @@ def gestorRespuesta(f,q):
 # Cada nueva respuesta añadir un key: <nombre_función>
 funcionGestorRespuesta = {
     "pagoBarrios": pagoBarrios,
-    "input.saludo": imputSaludo
+    "Complemento.Saludo": imputSaludo
     } # Tiene que estar al final de las funciones que pretendemos llamar

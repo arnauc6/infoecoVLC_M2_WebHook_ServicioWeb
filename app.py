@@ -7,11 +7,11 @@
 import os
 import json
 
-from flask import Flask         # Flask es un framework minimalista que te 
+from flask import Flask         # Flask es un framework minimalista que te
 from flask import request       # permite crear aplicaciones web rápidamente
 from flask import make_response # tiene una licencia BSD
 
-from gestor_respuesta import * # Importa .py con las funciones de respuestas
+from gestor_respuesta import gestorRespuesta # Importa .py con las funciones de respuestas
 
 
 ##------------------------------------------------------------------------------

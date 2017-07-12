@@ -7,13 +7,15 @@
 
 # Importar locales solo si el valor resultado es numérico
 import locale #Librería que nos permite adaptar el formato numérico al Español
-
-locale.setlocale(locale.LC_ALL,'es_ES.utf8')
+try:
+    locale.setlocale(locale.LC_ALL,'es_ES.utf8')
+except:
+    locale.setlocale(locale.LC_ALL,'')
 
 
 from bson.son import SON
 
-from unir_texto import * # Llama a la función que une el texto
+from unir_texto import unirTexto # Llama a la función que une el texto
 
 
 ##//////////////////////////////////////////////////////////////////////////////
@@ -24,7 +26,7 @@ from unir_texto import * # Llama a la función que une el texto
 #   - El barrio de Benimaclet pagó 6,428,288.48 € de impuestos en el año 2016
 
 # Texto en la lista:
-textoRespuesta = [u"El barrio de ", u" pagó ", u"€ de ", u" en el año "]
+textoRespuesta = [u"El barrio de ", u" pagó ", u"€ de ", u" en el año ", u"."]
 
 
 ##//////////////////////////////////////////////////////////////////////////////
@@ -86,16 +88,16 @@ def valorPagoBarrios(impuesto,barrio,anyo,dbBarrios):
             }
          }
         ]
-    
+
     try:
         suma = sumaImpuesto(impuesto)
     except:
         print u"     - Error en suma"
-        
+
     try:
         pipeline[3]["$project"]["valor"]["$sum"].extend(suma)
     except:
-        print u"     - Error al añadir suma a pipline"   
+        print u"     - Error al añadir suma a pipline"
 
     # Consulta DB
     try:
@@ -109,8 +111,8 @@ def valorPagoBarrios(impuesto,barrio,anyo,dbBarrios):
         valor = respuesta[0][u"valor"]
         anyo = respuesta[0][u"anyo"]
 
-    
-    
+
+
 ##    for dato in respuesta:
 ##        print type(dato)
 ##        valor = dato[u"valor"]
