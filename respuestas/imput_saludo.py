@@ -4,26 +4,48 @@
 ##//////////////////////////////////////////////////////////////////////////////
 ## Importar
 ##//////////////////////////////////////////////////////////////////////////////
+import time # Para añadir fecha y hora a los errores (except)
+import random # Para que sea una entre varias respuestas
 
-from unir_texto import *
-
+from unir_texto import unirTexto # Llama a la función que une el texto
 
 ##//////////////////////////////////////////////////////////////////////////////
 ## Texto respuesta
 ##//////////////////////////////////////////////////////////////////////////////
-
-# Texto ejemplo:
-#   - El barrio de Benimaclet paga 6,428,288.48 € de impuestos
-# Texto en la lista:
-##textoRespuesta = [u"El barrio de ", u" paga ", u"€ de "]
-textoRespuesta = u"Buenos días"
-
+textoRespuesta = {
+        "Cast": [ # Responderá una de las opciones
+                [u"¡Buenos días ", u"!"], # ¡Buenos días $nombre!
+                [u"Buenos días ", u", ¿Qué tal?"] # Buenos días $nombre, ¿Qué tal?
+        ],
+        "Val": [
+                [u"Bon dia ", u"!"], # Bon dia $nombre!
+                [u"Bon dia ", u", què tal?"] # Bon dia $nombre, què tal?
+        ]
+        }
 
 ##//////////////////////////////////////////////////////////////////////////////
 ## Funcion principal
 ##//////////////////////////////////////////////////////////////////////////////
 
 def imputSaludo(result,dbValencia):
-    print u"Recibimos petición de", result["action"]
-    texto = textoRespuesta
+    print time.strftime("%c"), u"- Recibimos petición de", result["action"]
+
+    # Sacamos los parámetros  de result ----------------------------------------
+    try:
+        nombre = result["parameters"]["nombre"]
+        idioma = result["parameters"]["idioma"]
+    except Exception as e:
+        print "     ", time.strftime("%c"), "- Error al obtener los parametros: ", type(e), e
+    #---------------------------------------------------------------- parámetros
+
+    textoRespuestaI = textoRespuesta[idioma]
+    l = len(textoRespuestaI)
+    texto = ""
+
+    try:
+        texto = unirTexto(textoRespuestaI[random.randrange(l)], nombre)
+
+    except Exception as e:
+        print "     ", time.strftime("%c"), "- Error función unirTexto: ", type(e), e
+
     return texto
