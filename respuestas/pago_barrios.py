@@ -7,6 +7,8 @@
 
 # Importar locales solo si el valor resultado es numérico
 import locale #Librería que nos permite adaptar el formato numérico al Español
+import time # Para añadir fecha y hora a los errores (except)
+
 try:
     locale.setlocale(locale.LC_ALL,'es_ES.utf8')
 except:
@@ -30,11 +32,12 @@ textoRespuesta = {
         "Cast": [u"El barrio de ", u" pagó ", u"€ de ", u" en el año ", u"."],
         "Val": [u"El barri de ", u" va pagar ", u" € d'", u" l'any " , u"."]
         }
+
 textoFaltaBarrio = {
         "Cast": u"""Por favor, indícanos el nombre del barrio del que quieras obtener la información.
 (El nombre debe estar bien escrito)""",
-        "Val": u"""Per favor, indícanos el nombre del barrio del que quieras obtener la información.
-(El nombre debe estar bien escrito)"""
+        "Val": u"""Per favor, indica'ns el nom del barri del que vulgues obtenir la informació.
+(El nom ha d'estar ben escrit)"""
 }
 
 ##//////////////////////////////////////////////////////////////////////////////
@@ -51,28 +54,29 @@ def pagoBarrios(result,db):
         barrio = result["parameters"]["barrios"]
         anyo = result["parameters"]["anyo"]
         idioma = result["parameters"]["idioma"]
-    except:
-        print "    - Error al obtener los parametros"
+    except Exception as e:
+        print "     ", time.strftime("%c"), "- Error al obtener los parametros: ", type(e), e
+
     #---------------------------------------------------------------- parámetros
 
+    # Si falta barrio se pide
     if barrio == u"":
         return textoFaltaBarrio[idioma]
-
-
 
     try:
         valor, anyo = valorPagoBarrios(impuesto,barrio,anyo,dbBarrios)
 
-    except:
-        print "    - Error función valor"
+    except Exception as e:
+        print "     ", time.strftime("%c"), "- Error función valor: ", type(e), e
 
     try:
         if valor == u"-1,00" or valor == u"-1.00":
             texto = u"No disponemos de los datos del año "+unicode(anyo)
         else:
             texto = unirTexto(textoRespuesta[idioma], barrio, valor, impuesto, anyo)
-    except:
-        print "    - Error función unirTexto"
+
+    except Exception as e:
+        print "     ", time.strftime("%c"), "- Error función unirTexto: ", type(e), e
 
     return texto
 
@@ -102,23 +106,24 @@ def valorPagoBarrios(impuesto,barrio,anyo,dbBarrios):
 
     try:
         suma = sumaImpuesto(impuesto)
-    except:
-        print u"     - Error en suma"
+    except Exception as e:
+        print "          ", time.strftime("%c"), "- Error en suma: ", type(e), e
+
 
     try:
         pipeline[3]["$project"]["valor"]["$sum"].extend(suma)
-    except:
-        print u"     - Error al añadir suma a pipline"
+    except Exception as e:
+        print "          ", time.strftime("%c"), "- Error al añadir suma a pipeline: ", type(e), e
 
     # Consulta DB
     try:
         respuesta = list(dbBarrios.aggregate(pipeline))
     except Exception as e:
-        print "Error:", type(e), e
-        print "     - Error en la consulta PagoBarrios"
+        print "          ", time.strftime("%c"), "- Error conexión PagoBarrios: ", type(e), e
 
     if respuesta == []:
         valor = -1
+        anyo = ""
     else:
         valor = respuesta[0][u"valor"]
         anyo = respuesta[0][u"anyo"]
@@ -164,8 +169,5 @@ def sumaImpuesto(impuesto):
             "$impuestos.IBI Personas Físicas",
             "$impuestos.IBI Personas Jurídicas"
             ]
-
-    else:
-        print u"     - Error en valorPagoBarrios - Datos sin año"
 
     return suma
