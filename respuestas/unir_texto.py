@@ -13,7 +13,6 @@ def unirTexto(texto, *parametros):
     respuesta = u""
 
     if len(texto)-1==len(parametros): #R+p+R+p+R
-        print u"in"
         for i in range(0,len(parametros)):
             respuesta = respuesta+texto[i]+unicode(parametros[i])
         respuesta = respuesta+texto[i+1]

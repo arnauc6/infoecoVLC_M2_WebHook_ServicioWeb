@@ -44,7 +44,7 @@ textoFaltaBarrio = {
 ## Funcion principal
 ##//////////////////////////////////////////////////////////////////////////////
 def pagoBarrios(result,db):
-    print "Recibimos petición de pagoBarrios"
+    print time.strftime("%c"), "- Recibimos petición de pagoBarrios"
     dbBarrios = db.barrios # Accedemos a la colección donde almacenamos todos los datos
 
     texto = u"LLegó"
@@ -56,7 +56,6 @@ def pagoBarrios(result,db):
         idioma = result["parameters"]["idioma"]
     except Exception as e:
         print "     ", time.strftime("%c"), "- Error al obtener los parametros: ", type(e), e
-
     #---------------------------------------------------------------- parámetros
 
     # Si falta barrio se pide
