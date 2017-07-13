@@ -6,7 +6,7 @@
 ##------------------------------------------------------------------------------
 
 from respuestas.pago_barrios import *
-from respuestas.imput_saludo import *
+from respuestas.complementoSaludo import *
 
 
 ##------------------------------------------------------------------------------
@@ -15,8 +15,8 @@ from respuestas.imput_saludo import *
 
 # Cada nueva respuesta añadir un key: <nombre_función>
 funcionGestorRespuesta = {
-    "pagoBarrios": pagoBarrios,
-    "Complemento.Saludo": imputSaludo
+    "r.pagoBarrios": pagoBarrios,
+    "c.Saludo": complementoSaludo
     } # Tiene que estar al final de las funciones que pretendemos llamar
 
 

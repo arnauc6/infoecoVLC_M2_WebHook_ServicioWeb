@@ -27,7 +27,7 @@ textoRespuesta = {
 ## Funcion principal
 ##//////////////////////////////////////////////////////////////////////////////
 
-def imputSaludo(result,dbValencia):
+def complementoSaludo(result,dbValencia):
     print time.strftime("%c"), u"- Recibimos petición de", result["action"]
 
     # Sacamos los parámetros  de result ----------------------------------------
