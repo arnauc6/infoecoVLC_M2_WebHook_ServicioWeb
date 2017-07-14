@@ -28,7 +28,7 @@ textoRespuesta = {
 ##//////////////////////////////////////////////////////////////////////////////
 
 def complementoSaludo(result,dbValencia):
-    print time.strftime("%c"), u"- Recibimos petición de", result["action"]
+    print time.strftime("%c"), "- Recibimos petición de", result["action"]
 
     # Sacamos los parámetros  de result ----------------------------------------
     try:
