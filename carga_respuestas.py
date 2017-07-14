@@ -27,13 +27,20 @@ funcionGestorRespuesta = {
 ##------------------------------------------------------------------------------
 import pymongo
 try:
-    from variables import URL_de_MongoDB
+    from variables import URL_de_MongoDB, URL_de_MongoDB_U
     uri = URL_de_MongoDB # Variable de entorno
+    uri_u = URL_de_MongoDB_U
 except:
-    print "Error al cargar URL de MongoDB"
+    print "Error al cargar URLs de MongoDB"
 
 try:
     client = pymongo.MongoClient(uri)
     db = client.get_default_database() # Accedemos a la BD donde tenemos las colecciones
 except:
-    print "Error al conectarse a la BD de MongoDB"
+    print "Error al conectarse a la BD de MongoDB Respuestas"
+
+try:
+    clientU = pymongo.MongoClient(uri_u)
+    dbU = clientU.get_default_database() # Accedemos a la BD donde tenemos las colecciones
+except:
+    print "Error al conectarse a la BD de MongoDB Usuarios"

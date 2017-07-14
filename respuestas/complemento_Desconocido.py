@@ -9,6 +9,7 @@ import random # Para que sea una entre varias respuestas
 
 from unir_texto import unirTexto # Llama a la función que une el texto
 
+
 ##//////////////////////////////////////////////////////////////////////////////
 ## Texto respuesta
 ##//////////////////////////////////////////////////////////////////////////////
@@ -27,7 +28,7 @@ textoRespuesta = {
 ## Funcion principal
 ##//////////////////////////////////////////////////////////////////////////////
 
-def complementoDesconocido(post,dbValencia):
+def complementoDesconocido(post,dbUsuario):
     print time.strftime("%c"), "- Recibimos petición de", post["result"]["action"]
     idUsuario = u""
     # Sacamos los parámetros  de result ----------------------------------------
@@ -37,7 +38,7 @@ def complementoDesconocido(post,dbValencia):
         print "     ", time.strftime("%c"), "- Error al obtener los parametros: ", type(e), e
 
 
-    usuario = buscarUsuario(idUsuario)
+    usuario = buscarUsuario(idUsuario, dbUsuario)
 
     if 'idioma' in usuario and 'nombre' in usuario:
         nombre = usuario["nombre"]
@@ -66,14 +67,12 @@ def complementoDesconocido(post,dbValencia):
 # //////////////////////////////////////////////////////////////////////////////
 # MongoDB
 # //////////////////////////////////////////////////////////////////////////////
-import pymongo
-urlMongoDBUsuarios = "mongodb://prueba:prueba@ds127321.mlab.com:27321/datos_valencia"
-clientU = pymongo.MongoClient(urlMongoDBUsuarios)
-dbU = clientU.get_default_database() # Accedemos a la BD donde tenemos las colecciones
-dbUsuarios = dbU.usuarios
 
 
-def buscarUsuario(idUsario):
+
+
+def buscarUsuario(idUsario, db):
+    dbUsuarios = db.usuarios # Colección
     query = {
         '_id': int(idUsario)
         }
