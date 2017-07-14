@@ -14,12 +14,12 @@ from unir_texto import unirTexto # Llama a la función que une el texto
 ##//////////////////////////////////////////////////////////////////////////////
 textoRespuesta = {
         "Cast": [ # Responderá una de las opciones
-                [u"¡Huy! Esa pregunta no la tenía contemplada."], # ¡Huy! Esa pregunta no la tenía contemplada.
-                [u"¡Qué pregunta más buena! La tendremos en cuenta para futuras actualizaciones."] # ¡Qué pregunta más buena! La tendremos en cuenta para futuras actualizaciones.
+                u"¡Huy! Esa pregunta no la tenía contemplada.", # ¡Huy! Esa pregunta no la tenía contemplada.
+                u"¡Qué pregunta más buena! La tendremos en cuenta para futuras actualizaciones." # ¡Qué pregunta más buena! La tendremos en cuenta para futuras actualizaciones.
         ],
         "Val": [
-                [u"Huy! Aquesta pregunta no la tenia contemplada."], # Bon dia $nombre!
-                [u"Quina pregunta més bona! La tindrem en compte per a futures actualitzacions."] # Bon dia $nombre, què tal?
+                u"Huy! Aquesta pregunta no la tenia contemplada.", # Bon dia $nombre!
+                u"Quina pregunta més bona! La tindrem en compte per a futures actualitzacions." # Bon dia $nombre, què tal?
         ]
         }
 
@@ -27,25 +27,62 @@ textoRespuesta = {
 ## Funcion principal
 ##//////////////////////////////////////////////////////////////////////////////
 
-def complementoDesconocido(result,dbValencia):
-    print time.strftime("%c"), "- Recibimos petición de", result["action"]
+def complementoDesconocido(post,dbValencia):
+    print time.strftime("%c"), "- Recibimos petición de", post["result"]["action"]
+    idUsuario = u""
+    # Sacamos los parámetros  de result ----------------------------------------
+    try:
+        idUsuario = post["sessionId"]
+    except Exception as e:
+        print "     ", time.strftime("%c"), "- Error al obtener los parametros: ", type(e), e
 
-    # # Sacamos los parámetros  de result ----------------------------------------
-    # try:
-    #     nombre = result["parameters"]["nombre"]
-    #     idioma = result["parameters"]["idioma"]
-    # except Exception as e:
-    #     print "     ", time.strftime("%c"), "- Error al obtener los parametros: ", type(e), e
-    # #---------------------------------------------------------------- parámetros
+
+    usuario = buscarUsuario(idUsuario)
+
+    if 'idioma' in usuario and 'nombre' in usuario:
+        nombre = usuario["nombre"]
+        idioma = usuario["idioma"]
+    else:
+        nombre = "Ciudadano"
+        idioma = "Cast"
+
+    #---------------------------------------------------------------- parámetros
+
+
 
     textoRespuestaI = textoRespuesta[idioma]
     l = len(textoRespuestaI)
     texto = ""
 
     try:
-        texto = unirTexto(textoRespuestaI[random.randrange(l)])
+        texto = textoRespuestaI[random.randrange(l)]
+        # texto = unirTexto(textoRespuestaI[random.randrange(l)])
 
     except Exception as e:
         print "     ", time.strftime("%c"), "- Error función unirTexto: ", type(e), e
 
     return texto
+
+# //////////////////////////////////////////////////////////////////////////////
+# MongoDB
+# //////////////////////////////////////////////////////////////////////////////
+import pymongo
+urlMongoDBUsuarios = "mongodb://prueba:prueba@ds127321.mlab.com:27321/datos_valencia"
+clientU = pymongo.MongoClient(urlMongoDBUsuarios)
+dbU = clientU.get_default_database() # Accedemos a la BD donde tenemos las colecciones
+dbUsuarios = dbU.usuarios
+
+
+def buscarUsuario(idUsario):
+    query = {
+        '_id': int(idUsario)
+        }
+
+    cursor = ""
+
+    try:
+        cursor = dbUsuarios.find_one(query)
+    except Exception as e:
+        print "     ", time.strftime("%c"), "- Error buscarUsuario: ", type(e), e
+
+    return cursor

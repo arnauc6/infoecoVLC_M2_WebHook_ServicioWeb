@@ -54,7 +54,10 @@ def webhook():                              # que aceptamos
     q = post["result"]
 
     # Buscamos el texto de la respuesta en la función que corresponda
-    respuesta = funcionGestorRespuesta[f](q,db)
+    if f != "c.Desconocido":
+        respuesta = funcionGestorRespuesta[f](q,db)
+    else:
+        respuesta = funcionGestorRespuesta[f](post,db)
 
     res = {
         "speech": respuesta,

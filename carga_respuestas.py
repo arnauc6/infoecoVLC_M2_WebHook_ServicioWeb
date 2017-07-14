@@ -17,7 +17,8 @@ from respuestas.complemento_Desconocido import *
 # Cada nueva respuesta añadir un key: <nombre_función>
 funcionGestorRespuesta = {
     "r.pagoBarrios": pagoBarrios,
-    "c.Saludo": complementoSaludo
+    "c.Saludo": complementoSaludo,
+    "c.Desconocido": complementoDesconocido
     } # Tiene que estar al final de las funciones que pretendemos llamar
 
 
