@@ -38,7 +38,13 @@ textoFaltaBarrio = {
 (El nombre debe estar bien escrito)""",
         "Val": u"""Per favor, indica'ns el nom del barri del que vulgues obtenir la informació.
 (El nom ha d'estar ben escrit)"""
-}
+        }
+
+textoAnyoSinDatos = {
+        "Cast": [u"No disponemos de los datos del año ", u"."],
+        "Val": [u"No disposem de les dades de l'any ", u"."]
+        }
+
 
 ##//////////////////////////////////////////////////////////////////////////////
 ## Funcion principal
@@ -70,7 +76,7 @@ def pagoBarrios(result,db):
 
     try:
         if valor == u"-1,00" or valor == u"-1.00":
-            texto = u"No disponemos de los datos del año "+unicode(anyo)
+            texto = unirTexto(textoAnyoSinDatos[idioma], anyo)
         else:
             texto = unirTexto(textoRespuesta[idioma], barrio, valor, impuesto, anyo)
 
@@ -122,7 +128,6 @@ def valorPagoBarrios(impuesto,barrio,anyo,dbBarrios):
 
     if respuesta == []:
         valor = -1
-        anyo = ""
     else:
         valor = respuesta[0][u"valor"]
         anyo = respuesta[0][u"anyo"]
