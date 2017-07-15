@@ -30,17 +30,17 @@ try:
     from variables import URL_de_MongoDB, URL_de_MongoDB_U
     uri = URL_de_MongoDB # Variable de entorno
     uri_u = URL_de_MongoDB_U
-except:
-    print "Error al cargar URLs de MongoDB"
+except Exception as e:
+    print "     ", time.strftime("%c"), "- Error al cargar URLs de MongoDB: ", type(e), e
 
 try:
     client = pymongo.MongoClient(uri)
     db = client.get_default_database() # Accedemos a la BD donde tenemos las colecciones
-except:
-    print "Error al conectarse a la BD de MongoDB Respuestas"
+except Exception as e:
+    print "     ", time.strftime("%c"), "- Error al conectarse a la BD de MongoDB Respuestas: ", type(e), e
 
 try:
     clientU = pymongo.MongoClient(uri_u)
     dbU = clientU.get_default_database() # Accedemos a la BD donde tenemos las colecciones
-except:
-    print "Error al conectarse a la BD de MongoDB Usuarios"
+except Exception as e:
+    print "     ", time.strftime("%c"), "- Error al conectarse a la BD de MongoDB Usuarios: ", type(e), e

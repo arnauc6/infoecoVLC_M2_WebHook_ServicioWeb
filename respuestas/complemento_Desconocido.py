@@ -68,9 +68,6 @@ def complementoDesconocido(post,dbUsuario):
 # MongoDB
 # //////////////////////////////////////////////////////////////////////////////
 
-
-
-
 def buscarUsuario(idUsario, db):
     dbUsuarios = db.usuarios # Colección
     query = {

@@ -35,7 +35,7 @@ app = Flask(__name__)
 # RUTA POR DEFECTO /
 @app.route("/") # Con esto podemos comprobar que el servidor está activo
 def hello():
-    return "Hello from Python!"
+    return "Hello!"
 
 
 # RUTA DONDE APUNTA API.IA /////////////////////////////////////////////////////
