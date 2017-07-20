@@ -8,6 +8,7 @@
 from respuestas.pago_barrios import *
 from respuestas.complemento_Saludo import *
 from respuestas.complemento_Desconocido import *
+from respuestas.r_salario_nombre import *
 
 
 ##------------------------------------------------------------------------------
@@ -18,7 +19,8 @@ from respuestas.complemento_Desconocido import *
 funcionGestorRespuesta = {
     "r.pagoBarrios": pagoBarrios,
     "c.Saludo": complementoSaludo,
-    "c.Desconocido": complementoDesconocido
+    "c.Desconocido": complementoDesconocido,
+    "r.salario.nombre": salarioNombre
     } # Tiene que estar al final de las funciones que pretendemos llamar
 
 
