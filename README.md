@@ -65,7 +65,7 @@ El modulo consta con todos los archivos necesarios para ser ejecutado en utiliza
                 CustomLog ${APACHE_LOG_DIR}/error.log combined
 
         </VirtualHost>
-        
+
 1. Instalamos wsgi:
 
         apt-get install libapache2-mod-wsgi
@@ -83,6 +83,15 @@ El modulo consta con todos los archivos necesarios para ser ejecutado en utiliza
 1. Descargamos el módulo:
 
         git clone https://github.com/areahackerscivics/infoecoVLC_M2_WebHook_ServicioWeb.git
+
+1. Cambiamos el  nombre de variables_ejemplo.py por **variables.py**.
+
+        cd infoecoVLC_M2_WebHook_ServicioWeb
+        mv variables_ejemplo.py variables.py
+
+1. Sustituir las “XXX” de dentro de **variables.py** por las variables personales.
+
+        nano variables.py
 
 1. Instalamos flask: (Y el resto de librerías).
 
