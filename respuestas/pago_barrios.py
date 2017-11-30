@@ -51,7 +51,7 @@ textoAnyoSinDatos = {
 ##//////////////////////////////////////////////////////////////////////////////
 def pagoBarrios(result,db):
     print time.strftime("%c"), "- Recibimos petición de pagoBarrios"
-    dbBarrios = db.barrios # Accedemos a la colección donde almacenamos todos los datos
+    dbBarrios = db.barrio_impuestos # Accedemos a la colección donde almacenamos todos los datos
 
     # Sacamos los parámetros  de result ----------------------------------------
     try:

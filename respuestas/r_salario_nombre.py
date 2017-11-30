@@ -27,7 +27,7 @@ from unir_texto import unirTexto # Llama a la función que une el texto
 # Texto en la lista:
 textoRespuesta1 = {
         "Cast": [u"", u" gana ", u"€ de retribución anual bruta (sin antigüedad) por su cargo de ", u" desde el ", u"."],
-        "Val": [u""]
+        "Val": [u"", u" guanya ", u"€ de retribució anual bruta (sense antiguitat) pel seu càrrec de ", u" des del ", u"."]
         }
 
 textoRespuesta2 = {
@@ -36,13 +36,13 @@ textoRespuesta2 = {
         }
 
 textoFaltaNombre = {
-        "Cast": [u""],
-        "Val": [u""]
+        "Cast": [u"Pregunta otra vez."],
+        "Val": [u"Pregunta altra volta."]
         }
 
 textoAnyoSinDatos = {
-        "Cast": [u""],
-        "Val": [u""]
+        "Cast": [u"Pregunta otra vez."],
+        "Val": [u"Pregunta altra volta."]
         }
 
 
