@@ -3,7 +3,7 @@
 Módulo responsable de gestionar las respuestas a las preguntas ya clasificadas por el agente inteligente. Consulta los datos actualizados y construye la respuesta final. Se comunica con el módulo 4 (Integración Telegram). Si quieres más información entra al proyecto **[infoecoVLC: Asistente virtual para información económica municipal](https://github.com/areahackerscivics/infoecoVLC)**
 
 ## Descripción
-(Imagen diagrama funcionamiento)
+![](https://github.com/areahackerscivics/infoecoVLC_M2_WebHook_ServicioWeb/blob/master/Documentaci%C3%B3n/Diagrama_M2-WebHook.png)
 
 
 ## Guía de uso
