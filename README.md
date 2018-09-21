@@ -1,9 +1,9 @@
-# **Módulo 2: WebHook (Servicio Web)**
+# **Módulo 3: Gestor de diálogo (Servicio Web)**
 
-Módulo responsable de gestionar las respuestas a las preguntas ya clasificadas por el agente inteligente. Consulta los datos actualizados y construye la respuesta final. Se comunica con el módulo 4 (Integración Telegram). Si quieres más información entra al proyecto **[infoecoVLC: Asistente virtual para información económica municipal](https://github.com/areahackerscivics/infoecoVLC)**
+Módulo responsable de gestionar las respuestas a las preguntas ya clasificadas por el agente inteligente. Consulta los datos actualizados y construye la respuesta final. Se comunica con el módulo 4 (Integración Telegram). Si quieres más información entra al proyecto **[infoecoVLC: Asistente virtual para información económica municipal](https://github.com/arnauc6/infoecoVLC.git)**
 
 ## Descripción
-![](https://github.com/areahackerscivics/infoecoVLC_M2_WebHook_ServicioWeb/blob/master/Documentaci%C3%B3n/Diagrama_M2-WebHook.PNG)
+![](https://github.com/arnauc6/infoecoVLC_M3_Gestor_dialogo/blob/master/Documentaci%C3%B3n/Diagrama_M2-WebHook.PNG)
 
 
 ## Guía de uso
@@ -82,7 +82,7 @@ El modulo consta con todos los archivos necesarios para ser ejecutado en utiliza
 
 1. Descargamos el módulo:
 
-        git clone https://github.com/areahackerscivics/infoecoVLC_M2_WebHook_ServicioWeb.git
+        git clone https://github.com/arnauc6/infoecoVLC_M3_Gestor_dialogo.git
 
 1. Cambiamos el  nombre de variables_ejemplo.py por **variables.py**.
 
